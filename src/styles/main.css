@@ -1,0 +1,43 @@
+.student-navbar {
+  background: linear-gradient(90deg, #0f172a, #1e293b);
+  padding: 14px 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+  color: #fff !important;
+  font-size: 1.7rem;
+  font-weight: 800;
+}
+
+.navbar-brand span {
+  color: #38bdf8;
+}
+
+.student-navbar .nav-link {
+  color: #e5e7eb !important;
+  font-weight: 500;
+}
+
+.student-navbar .nav-link:hover {
+  color: #38bdf8 !important;
+}
+
+.login-btn {
+  color: #fff !important;
+  border: 1px solid #38bdf8;
+  border-radius: 25px;
+  padding: 8px 18px;
+}
+
+.start-btn {
+  background: #38bdf8;
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 25px;
+  padding: 8px 18px;
+}
+
+.start-btn:hover {
+  background: #0ea5e9;
+}

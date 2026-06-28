@@ -1,0 +1,36 @@
+.hero{
+    background:#0f172a;
+    color:white;
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+}
+
+.hero-badge{
+    background:#1e293b;
+    padding:8px 18px;
+    border-radius:30px;
+    color:#38bdf8;
+    display:inline-block;
+    margin-bottom:20px;
+}
+
+.hero-title{
+    font-size:3.5rem;
+    font-weight:800;
+}
+
+.hero-title span{
+    color:#38bdf8;
+}
+
+.hero-text{
+    color:#cbd5e1;
+    font-size:1.1rem;
+    margin:25px 0;
+}
+
+.hero-image{
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}

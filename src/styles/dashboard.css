@@ -1,0 +1,31 @@
+.dashboard {
+  background: #f8fafc;
+  min-height: 90vh;
+}
+
+.dashboard-title {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.dashboard-subtitle {
+  color: #64748b;
+}
+
+.dashboard-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 18px;
+  height: 100%;
+  box-shadow: 0 8px 25px rgba(0,0,0,.08);
+  transition: .3s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-6px);
+}
+
+.dashboard-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+}
