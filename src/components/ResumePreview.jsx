@@ -1,29 +1,80 @@
 export default function ResumePreview({ formData }) {
   return (
-    <div className="card shadow border-0 p-4">
+    <div id="resume-preview" className="resume-preview">
 
-      <h2>{formData.fullName || "Your Name"}</h2>
+  <h1>{formData.fullName || "YOUR NAME"}</h1>
 
-      <p>
-        {formData.email || "email@example.com"} |
-        {" "}
-        {formData.phone || "+91 XXXXX XXXXX"}
-      </p>
+  <p>
+    {formData.email} | {formData.phone}
+  </p>
 
-      <hr />
+  <p>
+    {formData.linkedin}
+  </p>
 
-      <h4>Education</h4>
-      <p>{formData.education || "Education will appear here..."}</p>
+  <p>
+    {formData.github}
+  </p>
 
-      <h4>Skills</h4>
-      <p>{formData.skills || "Skills will appear here..."}</p>
+  <p>
+    {formData.portfolio}
+  </p>
 
-      <h4>Projects</h4>
-      <p>{formData.projects || "Projects will appear here..."}</p>
+  <hr />
 
-      <h4>Experience</h4>
-      <p>{formData.experience || "Experience will appear here..."}</p>
+  <h3>Professional Summary</h3>
+  <p>{formData.summary}</p>
 
-    </div>
+  <hr />
+
+  <h3>Education</h3>
+
+<div className="education-list">
+  {(formData.education || "")
+    .split("\n")
+    .filter((edu) => edu.trim() !== "")
+    .map((edu, index) => (
+      <div className="resume-education" key={index}>
+        🎓 {edu.trim()}
+      </div>
+    ))}
+</div>
+
+  <hr />
+
+  <h3>Skills</h3>
+
+<div className="skills-container">
+  {(formData.skills || "")
+    .split(",")
+    .filter((skill) => skill.trim() !== "")
+    .map((skill, index) => (
+      <span className="skill-tag" key={index}>
+        {skill.trim()}
+      </span>
+    ))}
+</div>
+
+  <hr />
+
+  <h3>Projects</h3>
+
+<div className="project-list">
+  {(formData.projects || "")
+    .split("\n")
+    .filter((project) => project.trim() !== "")
+    .map((project, index) => (
+      <div className="resume-project" key={index}>
+        <strong>📌 {project.trim()}</strong>
+      </div>
+    ))}
+</div>
+
+  <hr />
+
+  <h3>Experience</h3>
+  <p>{formData.experience}</p>
+
+</div>
   );
 }

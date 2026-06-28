@@ -1,0 +1,63 @@
+.resume-preview{
+    background:#fff;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+    min-height:850px;
+}
+
+.resume-preview h1{
+    font-size:32px;
+    font-weight:800;
+    text-transform:uppercase;
+}
+
+.resume-preview h3{
+    margin-top:25px;
+    font-size:18px;
+    border-bottom:2px solid #0f172a;
+    padding-bottom:5px;
+    text-transform:uppercase;
+}
+
+.resume-preview p{
+    color:#444;
+    line-height:1.7;
+}
+.skills-container{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:15px;
+}
+
+.skill-tag{
+    background:#0ea5e9;
+    color:white;
+    padding:8px 16px;
+    border-radius:30px;
+    font-size:14px;
+    font-weight:600;
+}
+.project-list {
+  margin-top: 15px;
+}
+
+.resume-project {
+  background: #f8fafc;
+  border-left: 4px solid #0ea5e9;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+.education-list {
+  margin-top: 15px;
+}
+
+.resume-education {
+  background: #f8fafc;
+  border-left: 4px solid #0f172a;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}

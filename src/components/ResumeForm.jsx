@@ -1,3 +1,4 @@
+import { downloadPDF } from "../utils/pdf";
 export default function ResumeForm({ formData, handleChange }) {
   return (
     <div className="card shadow-sm border-0 p-4">
@@ -30,7 +31,41 @@ export default function ResumeForm({ formData, handleChange }) {
         value={formData.phone}
         onChange={handleChange}
       />
+        <input
+        type="text"
+        name="linkedin"
+        placeholder="LinkedIn Profile URL"
+        className="form-control mb-3"
+        value={formData.linkedin}
+        onChange={handleChange}
+        />
 
+        <input
+        type="text"
+        name="github"
+        placeholder="GitHub Profile URL"
+        className="form-control mb-3"
+        value={formData.github}
+        onChange={handleChange}
+        />
+
+        <input
+        type="text"
+        name="portfolio"
+        placeholder="Portfolio Website URL"
+        className="form-control mb-3"
+        value={formData.portfolio}
+        onChange={handleChange}
+        />
+
+        <textarea
+        name="summary"
+        placeholder="Professional Summary"
+        className="form-control mb-3"
+        rows="3"
+        value={formData.summary}
+        onChange={handleChange}
+        ></textarea>
       <textarea
         name="education"
         placeholder="Education"
@@ -66,7 +101,27 @@ export default function ResumeForm({ formData, handleChange }) {
         value={formData.experience}
         onChange={handleChange}
       ></textarea>
+      <div className="d-flex gap-3 mt-4">
+  <button type="submit" className="btn btn-primary">
+    🤖 Generate AI Resume
+  </button>
 
+  <button
+    type="button"
+    className="btn btn-success"
+    onClick={() => alert("Resume Saved Successfully!")}
+  >
+    💾 Save Resume
+  </button>
+
+   <button
+    type="button"
+    className="btn btn-danger"
+    onClick={downloadPDF}
+  >
+    📄 Download PDF
+  </button>
+</div>
     </div>
   );
 }

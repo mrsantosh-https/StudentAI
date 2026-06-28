@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../styles/dashboardLayout.css";
 
 export default function Sidebar() {
@@ -9,14 +9,16 @@ export default function Sidebar() {
       </h3>
 
       <nav className="sidebar-menu">
-        <Link to="/dashboard">🏠 Dashboard</Link>
-        <Link to="/resume-builder">📄 Resume Builder</Link>
-        <Link to="/cover-letter">📝 Cover Letter</Link>
-        <Link to="/interview">🎤 AI Interview</Link>
-        <Link to="/notes">🧠 Notes</Link>
-        <Link to="/roadmap">🗺 Roadmap</Link>
-        <Link to="/profile">👤 Profile</Link>
+        <NavLink to="/dashboard">🏠 Dashboard</NavLink>
+        <NavLink to="/resume-builder">📄 Resume Builder</NavLink>
+        <NavLink to="/cover-letter">🤖 Cover Letter</NavLink>
+        <NavLink to="/interview">🎤 AI Interview</NavLink>
+        <NavLink to="/notes">🧠 Notes AI</NavLink>
+        <NavLink to="/roadmap">🗺 Roadmap</NavLink>
+        <NavLink to="/profile">👤 Profile</NavLink>
       </nav>
+
+      <button className="logout-btn">🚪 Logout</button>
     </aside>
   );
 }

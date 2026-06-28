@@ -1,22 +1,26 @@
 import { useState } from "react";
+import { downloadPDF } from "../utils/pdf";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import ResumeForm from "../components/ResumeForm";
 import ResumePreview from "../components/ResumePreview";
-
 import "../styles/dashboardLayout.css";
 import "../styles/resume.css";
 
 export default function ResumeBuilder() {
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    education: "",
-    skills: "",
-    projects: "",
-    experience: "",
-  });
+  fullName: "",
+  email: "",
+  phone: "",
+  linkedin: "",
+  github: "",
+  portfolio: "",
+  summary: "",
+  education: "",
+  skills: "",
+  projects: "",
+  experience: "",
+});
 
   const handleChange = (e) => {
     setFormData({
