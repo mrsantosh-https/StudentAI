@@ -8,7 +8,19 @@ export default function Topbar() {
         <p>Welcome back, Santosh 👋</p>
       </div>
 
-      <button className="btn btn-primary">Upgrade Pro</button>
+      <div className="d-flex align-items-center gap-3">
+        <input
+          type="text"
+          className="form-control topbar-search"
+          placeholder="Search..."
+        />
+
+        <button className="btn btn-light">🔔</button>
+
+        <div className="topbar-avatar">SY</div>
+
+        <button className="btn btn-primary">Upgrade Pro</button>
+      </div>
     </div>
   );
 }

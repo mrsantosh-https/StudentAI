@@ -29,3 +29,69 @@
   font-size: 3rem;
   margin-bottom: 15px;
 }
+.dashboard-hero {
+  background: linear-gradient(135deg, #2563eb, #9333ea);
+  color: white;
+  border-radius: 22px;
+}
+
+.dashboard-hero p {
+  color: #e0e7ff;
+}
+.activity-card {
+  border-radius: 22px;
+}
+
+.activity-item {
+  display: flex;
+  gap: 15px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-item span {
+  width: 42px;
+  height: 42px;
+  background: #f1f5f9;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activity-item h6 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.activity-item p {
+  margin: 3px 0 0;
+  color: #64748b;
+}
+.analytics-card{
+    border-radius:22px;
+}
+
+.analytics-placeholder{
+    height:250px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#f8fafc;
+    border-radius:16px;
+    color:#94a3b8;
+    font-size:20px;
+}
+
+.progress{
+    height:12px;
+    border-radius:20px;
+}
+
+.progress-bar{
+    background:linear-gradient(90deg,#2563eb,#9333ea);
+}

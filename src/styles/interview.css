@@ -1,0 +1,13 @@
+.feedback-card{
+    height:500px;
+    display:flex;
+    flex-direction:column;
+}
+
+.feedback-content{
+    flex:1;
+    overflow-y:auto;
+    white-space:pre-wrap;
+    line-height:1.8;
+    padding-right:10px;
+}
