@@ -61,3 +61,46 @@
   margin-bottom: 12px;
   border-radius: 8px;
 }
+.resume-header h1 {
+  font-size: 34px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.resume-header p {
+  margin: 4px 0;
+  color: #475569;
+}
+
+.resume-section {
+  margin-top: 24px;
+}
+
+.resume-section h4 {
+  font-size: 17px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-bottom: 2px solid #0f172a;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.resume-section p {
+  color: #334155;
+  line-height: 1.7;
+}
+.ats-card {
+  border-radius: 22px;
+  background: #ffffff;
+}
+
+.ats-result {
+  white-space: pre-line;
+  line-height: 1.8;
+  color: #334155;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 16px;
+  border-left: 5px solid #2563eb;
+}

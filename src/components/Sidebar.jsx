@@ -11,6 +11,7 @@ export default function Sidebar() {
       <nav className="sidebar-menu">
         <NavLink to="/dashboard">🏠 Dashboard</NavLink>
         <NavLink to="/resume-builder">📄 Resume Builder</NavLink>
+        <NavLink to="/my-resumes">📋 My Resumes</NavLink>
         <NavLink to="/cover-letter">🤖 Cover Letter</NavLink>
         <NavLink to="/interview">🎤 AI Interview</NavLink>
         <NavLink to="/notes">🧠 Notes AI</NavLink>
