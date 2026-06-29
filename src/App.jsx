@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import Interview from "./pages/Interview";
+import CoverLetter from "./pages/CoverLetter";
 import ResumeBuilder from "./pages/ResumeBuilder";
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/interview" element={<Interview />} />
+        <Route path="/cover-letter" element={<CoverLetter />} />
         <Route path="/resume-builder" element={<ResumeBuilder />} />
       </Routes>
     </BrowserRouter>

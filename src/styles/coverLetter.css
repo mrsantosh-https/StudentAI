@@ -1,0 +1,9 @@
+.cover-output{
+    height:520px;
+    width:100%;
+}
+
+.cover-text{
+    height:420px;
+    overflow-y:auto;
+}

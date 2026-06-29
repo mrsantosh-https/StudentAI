@@ -30,3 +30,23 @@ Return only the professional summary.
     return "Failed to generate summary.";
   }
 }
+
+export async function generateCoverLetter(data) {
+  try {
+    const prompt = `
+Generate a professional cover letter.
+
+Company: ${data.company}
+Job Role: ${data.role}
+Skills and Experience: ${data.details}
+
+Return only the cover letter.
+`;
+
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+  } catch (error) {
+    console.error(error);
+    return "Failed to generate cover letter.";
+  }
+}
