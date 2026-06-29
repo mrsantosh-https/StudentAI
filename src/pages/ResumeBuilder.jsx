@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { downloadPDF } from "../utils/pdf";
+import { generateSummary } from "../services/gemini";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import ResumeForm from "../components/ResumeForm";
@@ -22,6 +22,7 @@ export default function ResumeBuilder() {
   experience: "",
 });
 
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -29,6 +30,14 @@ export default function ResumeBuilder() {
     });
   };
 
+  const handleGenerateAI = async () => {
+  const summary = await generateSummary(formData);
+
+  setFormData((prev) => ({
+    ...prev,
+    summary,
+  }));
+};
   return (
     <div className="dashboard-layout">
       <Sidebar />
@@ -47,6 +56,7 @@ export default function ResumeBuilder() {
               <ResumeForm
                 formData={formData}
                 handleChange={handleChange}
+                handleGenerateAI={handleGenerateAI}
               />
             </div>
 

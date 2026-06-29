@@ -5,6 +5,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@vitejs/plugin-react": "latest",
     "axios": "^1.18.1",
     "bootstrap": "^5.3.8",

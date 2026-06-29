@@ -1,5 +1,5 @@
 import { downloadPDF } from "../utils/pdf";
-export default function ResumeForm({ formData, handleChange }) {
+export default function ResumeForm({ formData, handleChange, handleGenerateAI, }) {
   return (
     <div className="card shadow-sm border-0 p-4">
 
@@ -102,9 +102,13 @@ export default function ResumeForm({ formData, handleChange }) {
         onChange={handleChange}
       ></textarea>
       <div className="d-flex gap-3 mt-4">
-  <button type="submit" className="btn btn-primary">
-    🤖 Generate AI Resume
-  </button>
+  <button
+  type="button"
+  className="btn btn-primary"
+  onClick={handleGenerateAI}
+>
+  🤖 Generate AI Resume
+</button>
 
   <button
     type="button"
