@@ -1,0 +1,42 @@
+.app {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.dark-mode {
+  background: #020617 !important;
+  color: #e5e7eb !important;
+}
+
+.dark-mode .dashboard-main,
+.dark-mode .dashboard-content {
+  background: #020617 !important;
+  color: #e5e7eb !important;
+}
+
+.dark-mode .card,
+.dark-mode .topbar {
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+}
+
+.dark-mode .sidebar {
+  background: #020617 !important;
+}
+
+.dark-mode .text-muted {
+  color: #94a3b8 !important;
+}
+
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select {
+  background: #020617 !important;
+  color: #e5e7eb !important;
+  border-color: #334155 !important;
+}
+
+.dark-mode .list-group-item {
+  background: #0f172a !important;
+  color: #e5e7eb !important;
+}

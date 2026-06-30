@@ -1,4 +1,5 @@
 import api from "../services/api";
+import toast from "react-hot-toast";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import ResumeForm from "../components/ResumeForm";
@@ -59,11 +60,11 @@ const handleSaveResume = async () => {
       });
     }
 
-    alert(response.data.message);
+   toast.success(response.data.message);
     navigate("/my-resumes");
   } catch (error) {
     console.error(error);
-    alert("Resume save/update failed");
+    toast.error("Resume save/update failed");
   }
 };
 

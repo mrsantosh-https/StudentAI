@@ -1,0 +1,38 @@
+.profile-card {
+  max-width: 850px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: #fff;
+}
+
+.profile-photo-card {
+  max-width: 850px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
+}
+
+.profile-img {
+  object-fit: cover;
+  border: 5px solid #fff;
+  box-shadow: 0 12px 30px rgba(0,0,0,.15);
+}
+
+.profile-initial {
+  box-shadow: 0 12px 30px rgba(37,99,235,.25);
+}
+
+.profile-input {
+  border-radius: 14px;
+  padding: 12px 15px;
+}
+
+.profile-input:focus {
+  box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+}
+
+.profile-btn {
+  border-radius: 25px;
+  padding: 11px 25px;
+  font-weight: 700;
+}

@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import api from "../services/api";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 export default function MyResumes() {
   const [resumes, setResumes] = useState([]);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("latest");
   const fetchResumes = async () => {
     const response = await api.get("/resumes");
     setResumes(response.data);
@@ -20,14 +23,25 @@ export default function MyResumes() {
 
   await api.delete(`/resumes/${id}`);
 
-  alert("Resume deleted successfully");
+  toast.success("Resume deleted successfully");
+  toast.error("Delete failed");
   fetchResumes();
 };
 
   useEffect(() => {
     fetchResumes();
   }, []);
+  const filteredResumes = resumes
+  .filter((resume) =>
+    resume.title?.toLowerCase().includes(search.toLowerCase())
+  )
+  .sort((a, b) => {
+    if (sort === "latest") {
+      return new Date(b.created_at) - new Date(a.created_at);
+    }
 
+    return new Date(a.created_at) - new Date(b.created_at);
+  });
   return (
     <div className="dashboard-layout">
       <Sidebar />
@@ -37,10 +51,32 @@ export default function MyResumes() {
 
         <div className="dashboard-content">
           <h2 className="fw-bold">📋 My Resumes</h2>
+          <div className="row mt-4 mb-3">
+  <div className="col-md-8">
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Search resume by title..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  </div>
+
+  <div className="col-md-4">
+    <select
+      className="form-select"
+      value={sort}
+      onChange={(e) => setSort(e.target.value)}
+    >
+      <option value="latest">Latest First</option>
+      <option value="oldest">Oldest First</option>
+    </select>
+  </div>
+</div>
           <p className="text-muted">View your saved resumes.</p>
 
           <div className="row mt-4">
-            {resumes.map((resume) => (
+            {filteredResumes.map((resume) => (
               <div className="col-lg-4 col-md-6 mb-4" key={resume.id}>
                 <div className="card border-0 shadow-sm p-4 h-100">
                   <h5>{resume.title}</h5>

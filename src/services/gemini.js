@@ -175,12 +175,20 @@ Experience: ${resumeData.experience}
 Job Description:
 ${jobDescription}
 
-Return:
-1. Match Score out of 100
-2. Matching Skills
-3. Missing Skills
-4. Resume Improvement Tips
-5. Final Verdict
+Return exactly in this format:
+
+Match Score: __/100
+
+Matching Skills:
+-
+
+Missing Skills:
+-
+
+Resume Improvement Tips:
+-
+
+Final Verdict:
 `;
 
     const result = await model.generateContent(prompt);
@@ -188,5 +196,48 @@ Return:
   } catch (error) {
     console.error(error);
     return "Failed to match job description.";
+  }
+}
+export async function generateCareerRoadmap(goal) {
+  try {
+    const prompt = `
+Create a 6-month career roadmap for: ${goal}
+
+Return in this format:
+
+Goal:
+
+Month 1:
+-
+
+Month 2:
+-
+
+Month 3:
+-
+
+Month 4:
+-
+
+Month 5:
+-
+
+Month 6:
+-
+
+Projects to Build:
+-
+
+Skills to Focus:
+-
+
+Final Advice:
+`;
+
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+  } catch (error) {
+    console.error(error);
+    return "Failed to generate career roadmap.";
   }
 }

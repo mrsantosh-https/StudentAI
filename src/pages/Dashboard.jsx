@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import DashboardCard from "../components/DashboardCard";
+import api from "../services/api";
 import {
   LineChart,
   Line,
@@ -39,8 +41,8 @@ const tools = [
   {
     icon: "🗺️",
     title: "Career Roadmap",
-    description: "Get a personalized learning roadmap.",
-    link: "/roadmap",
+    description: "Get a personalized roadmap.",
+    link: "/career-roadmap",
     color: "#f97316",
   },
 ];
@@ -56,6 +58,25 @@ const usageData = [
 ];
 
 export default function Dashboard() {
+  const [analytics, setAnalytics] = useState({
+    total_resumes: 0,
+    profile_completion: 0,
+    latest_resume: null,
+  });
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await api.get("/dashboard/analytics");
+        setAnalytics(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAnalytics();
+  }, []);
+
   return (
     <div className="dashboard-layout">
       <Sidebar />
@@ -79,6 +100,38 @@ export default function Dashboard() {
                 </p>
               </div>
 
+              <div className="card border-0 shadow-sm p-4 mb-4">
+            <h4 className="fw-bold mb-4">🚀 Quick Actions</h4>
+
+            <div className="row g-3">
+
+              <div className="col-md-3">
+                <a href="/resume-builder" className="btn btn-primary w-100 py-3">
+                  📄 Resume Builder
+                </a>
+              </div>
+
+              <div className="col-md-3">
+                <a href="/cover-letter" className="btn btn-success w-100 py-3">
+                  ✉️ Cover Letter
+                </a>
+              </div>
+
+              <div className="col-md-3">
+                <a href="/interview" className="btn btn-warning w-100 py-3">
+                  🎤 AI Interview
+                </a>
+              </div>
+
+              <div className="col-md-3">
+                <a href="/my-resumes" className="btn btn-dark w-100 py-3">
+                  💼 My Resumes
+                </a>
+              </div>
+
+            </div>
+          </div>
+
               <div className="col-lg-4 text-lg-end mt-3 mt-lg-0">
                 <a href="/resume-builder" className="btn btn-light">
                   Build Resume →
@@ -88,47 +141,45 @@ export default function Dashboard() {
           </div>
 
           <div className="row g-4 mb-4">
-            <div className="col-lg-3 col-md-6">
+            <div className="col-lg-4 col-md-6">
               <div className="stats-card">
                 <div className="stats-icon" style={{ background: "#dbeafe" }}>
                   📄
                 </div>
                 <p className="text-muted mb-1">Total Resumes</p>
-                <h2>5</h2>
-                <span className="stats-trend">+20% this month ↗</span>
+                <h2>{analytics.total_resumes}</h2>
+                <span className="stats-trend">Saved in database</span>
               </div>
             </div>
 
-            <div className="col-lg-3 col-md-6">
+            <div className="col-lg-4 col-md-6">
               <div className="stats-card">
                 <div className="stats-icon" style={{ background: "#dcfce7" }}>
-                  ✉️
+                  👤
                 </div>
-                <p className="text-muted mb-1">Cover Letters</p>
-                <h2>3</h2>
-                <span className="stats-trend">+8% this week ↗</span>
+                <p className="text-muted mb-1">Profile Completion</p>
+                <h2>{analytics.profile_completion}%</h2>
+
+                <div className="progress mt-3">
+                  <div
+                    className="progress-bar"
+                    style={{ width: `${analytics.profile_completion}%` }}
+                  ></div>
+                </div>
               </div>
             </div>
 
-            <div className="col-lg-3 col-md-6">
+            <div className="col-lg-4 col-md-6">
               <div className="stats-card">
                 <div className="stats-icon" style={{ background: "#f3e8ff" }}>
-                  🎤
+                  📝
                 </div>
-                <p className="text-muted mb-1">Interviews</p>
-                <h2>12</h2>
-                <span className="stats-trend">+12% practice ↗</span>
-              </div>
-            </div>
-
-            <div className="col-lg-3 col-md-6">
-              <div className="stats-card">
-                <div className="stats-icon" style={{ background: "#ffedd5" }}>
-                  ⭐
-                </div>
-                <p className="text-muted mb-1">AI Generations</p>
-                <h2>20</h2>
-                <span className="stats-trend">+30% usage ↗</span>
+                <p className="text-muted mb-1">Latest Resume</p>
+                <h5 className="fw-bold">
+                  {analytics.latest_resume
+                    ? analytics.latest_resume.title
+                    : "No Resume"}
+                </h5>
               </div>
             </div>
           </div>
@@ -170,6 +221,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+
           <div className="row mt-4">
             {tools.map((tool, index) => (
               <DashboardCard key={index} {...tool} />
@@ -182,24 +234,24 @@ export default function Dashboard() {
             <div className="activity-item">
               <span>📄</span>
               <div>
-                <h6>Resume Generated</h6>
-                <p>AI resume created successfully</p>
+                <h6>Resume Saved</h6>
+                <p>Your latest resume is connected with backend.</p>
               </div>
             </div>
 
             <div className="activity-item">
-              <span>✉️</span>
+              <span>👤</span>
               <div>
-                <h6>Cover Letter Created</h6>
-                <p>Generated for Frontend Developer role</p>
+                <h6>Profile Updated</h6>
+                <p>Profile completion is {analytics.profile_completion}%.</p>
               </div>
             </div>
 
             <div className="activity-item">
-              <span>🎤</span>
+              <span>🤖</span>
               <div>
-                <h6>Interview Practice Completed</h6>
-                <p>React interview feedback received</p>
+                <h6>AI Tools Ready</h6>
+                <p>ATS, Job Matcher, Interview and Roadmap are available.</p>
               </div>
             </div>
           </div>

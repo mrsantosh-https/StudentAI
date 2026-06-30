@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../services/api";
 
 export default function Login() {
@@ -7,19 +8,28 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+    const handleLogin = async (e) => {
+      e.preventDefault();
 
-    const response = await api.post("/login", {
-      email,
-      password,
-    });
+      try {
+        const response = await api.post("/login", {
+          email,
+          password,
+        });
 
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
 
-    navigate("/dashboard");
-  };
+        toast.success("Login Successful 🎉");
+
+        navigate("/dashboard");
+
+      } catch (error) {
+        console.error(error);
+
+        toast.error("Invalid Email or Password");
+      }
+    };
 
   return (
     <div className="container py-5">
@@ -34,6 +44,7 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               className="form-control mb-3"
               placeholder="Email address"
+              autoComplete="email"
               required
             />
 
@@ -43,6 +54,7 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               className="form-control mb-3"
               placeholder="Password"
+              autoComplete="current-password"
               required
             />
 

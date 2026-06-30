@@ -1,21 +1,99 @@
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import api from "../services/api";
+
 export default function Signup() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    try {
+      await api.post("/register", formData);
+
+      toast.success("Account Created Successfully 🎉");
+
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Signup Failed");
+    }
+  };
+
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
         <div className="col-md-5">
-          <div className="card shadow border-0 p-4">
-            <h2 className="text-center mb-4">Create Account</h2>
+          <form
+            onSubmit={handleSignup}
+            className="card shadow border-0 p-4"
+          >
+            <h2 className="text-center mb-4">
+              Create Account
+            </h2>
 
-            <input type="text" className="form-control mb-3" placeholder="Full name" />
-            <input type="email" className="form-control mb-3" placeholder="Email address" />
-            <input type="password" className="form-control mb-3" placeholder="Password" />
+            <input
+              type="text"
+              name="name"
+              autoComplete="name"
+              className="form-control mb-3"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
 
-            <button className="btn btn-primary w-100">Signup</button>
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              className="form-control mb-3"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              type="password"
+              name="password"
+              autoComplete="password"
+              className="form-control mb-3"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100"
+            >
+              Signup
+            </button>
 
             <p className="text-center mt-3">
-              Already have an account? <a href="/login">Login</a>
+              Already have an account?{" "}
+              <Link to="/login">
+                Login
+              </Link>
             </p>
-          </div>
+          </form>
         </div>
       </div>
     </div>

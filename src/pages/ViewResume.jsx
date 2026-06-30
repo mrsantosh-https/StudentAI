@@ -182,12 +182,14 @@ export default function ViewResume() {
           </div>
 
           {matchResult && (
-            <div className="card border-0 shadow p-4 mt-4">
-              <h4>📊 Job Match Result</h4>
-              <hr />
-              <div style={{ whiteSpace: "pre-line" }}>{matchResult}</div>
-            </div>
-          )}
+  <div className="card border-0 shadow p-4 mt-4 job-match-card">
+    <h4>📊 Job Match Result</h4>
+    <hr />
+    <div className="job-match-result">
+      {matchResult}
+    </div>
+  </div>
+)}
         </div>
       </main>
     </div>

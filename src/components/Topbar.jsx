@@ -1,26 +1,83 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
 import "../styles/dashboardLayout.css";
 
 export default function Topbar() {
+  const [user, setUser] = useState(null);
+  const [darkMode, setDarkMode] = useState(
+      localStorage.getItem("darkMode") === "true"
+    );
+
+    useEffect(() => {
+      document.body.classList.toggle("dark-mode", darkMode);
+      localStorage.setItem("darkMode", darkMode);
+    }, [darkMode]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await api.get("/profile");
+        setUser(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <div className="topbar">
       <div>
         <h4>Dashboard</h4>
-        <p>Welcome back, Santosh 👋</p>
+        <p>
+          Welcome back, <strong>{user?.name || "User"}</strong> 👋
+        </p>
       </div>
 
-      <div className="d-flex align-items-center gap-3">
-        <input
-          type="text"
-          className="form-control topbar-search"
-          placeholder="Search..."
-        />
+      <div className="topbar-actions">
+  <input
+    type="text"
+    className="form-control topbar-search"
+    placeholder="Search..."
+  />
 
-        <button className="btn btn-light">🔔</button>
+  <button
+    className={`theme-toggle ${darkMode ? "active" : ""}`}
+    onClick={() => setDarkMode(!darkMode)}
+  >
+    <span>{darkMode ? "🌙" : "☀️"}</span>
+  </button>
 
-        <div className="topbar-avatar">SY</div>
+  <button className="notification-btn">
+    🔔
+    <span className="notification-badge">3</span>
+  </button>
 
-        <button className="btn btn-primary">Upgrade Pro</button>
-      </div>
+  <div className="profile-circle">
+    {user?.profile_photo ? (
+      <img
+        src={`http://127.0.0.1:8000/storage/${user.profile_photo}`}
+        alt="Profile"
+      />
+    ) : (
+      <span>{user?.name?.charAt(0).toUpperCase() || "U"}</span>
+    )}
+  </div>
+
+  <button className="upgrade-btn">Upgrade Pro</button>
+
+  <button
+    className="logout-btn"
+    onClick={() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }}
+  >
+    Logout
+  </button>
+</div>
     </div>
   );
 }
