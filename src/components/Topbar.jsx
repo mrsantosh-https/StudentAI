@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import "../styles/dashboardLayout.css";
+import Swal from "sweetalert2";
 
 export default function Topbar() {
   const [user, setUser] = useState(null);
@@ -31,7 +32,7 @@ export default function Topbar() {
       <div>
         <h4>Dashboard</h4>
         <p>
-          Welcome back, <strong>{user?.name || "User"}</strong> 👋
+          Welcome back,  <strong> Mr.{user?.name || "User"}</strong> 👋
         </p>
       </div>
 
@@ -69,11 +70,25 @@ export default function Topbar() {
 
   <button
     className="logout-btn"
-    onClick={() => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "/login";
-    }}
+  onClick={async () => {
+  const result = await Swal.fire({
+    title: "Logout?",
+    text: "You will be redirected to login page.",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#2563eb",
+    cancelButtonColor: "#64748b",
+    confirmButtonText: "Logout",
+    cancelButtonText: "Cancel",
+    reverseButtons: true,
+  });
+
+  if (!result.isConfirmed) return;
+
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  window.location.href = "/login";
+}}
   >
     Logout
   </button>

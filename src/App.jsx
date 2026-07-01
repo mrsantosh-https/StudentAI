@@ -9,11 +9,13 @@ import Dashboard from "./pages/Dashboard";
 import { Toaster } from "react-hot-toast";
 import Interview from "./pages/Interview";
 import MyResumes from "./pages/MyResumes";
+import JobMatcher from "./pages/JobMatcher";
 import JobTracker from "./pages/JobTracker";
 import ViewResume from "./pages/ViewResume";
 import CoverLetter from "./pages/CoverLetter";
 import CareerRoadmap from "./pages/CareerRoadmap";
 import ResumeBuilder from "./pages/ResumeBuilder";
+import InterviewHistory from "./pages/InterviewHistory";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -95,6 +97,24 @@ function App() {
             element={
               <ProtectedRoute>
                 <JobTracker />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/job-matcher"
+            element={
+              <ProtectedRoute>
+                <JobMatcher />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/interview-history"
+            element={
+              <ProtectedRoute>
+                <InterviewHistory />
               </ProtectedRoute>
             }
           />

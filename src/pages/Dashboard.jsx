@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import DashboardCard from "../components/DashboardCard";
 import api from "../services/api";
+const user = JSON.parse(localStorage.getItem("user"));
 import {
   LineChart,
   Line,
@@ -45,6 +46,13 @@ const tools = [
     link: "/career-roadmap",
     color: "#f97316",
   },
+  {
+    icon: "💼",
+    title: "Job Tracker",
+    description: "Track applications, interviews and offers.",
+    link: "/job-tracker",
+    color: "#0f172a",
+  },
 ];
 
 const usageData = [
@@ -62,6 +70,10 @@ export default function Dashboard() {
     total_resumes: 0,
     profile_completion: 0,
     latest_resume: null,
+    total_jobs: 0,
+    interview_jobs: 0,
+    offer_jobs: 0,
+    average_ats_score: 0,
   });
 
   useEffect(() => {
@@ -85,7 +97,7 @@ export default function Dashboard() {
         <Topbar />
 
         <div className="dashboard-content">
-          <h2 className="fw-bold">Welcome, Santosh 👋</h2>
+          <h2 className="fw-bold">Welcome, Mr. {user?.name || "User"} 👋</h2>
           <p className="text-muted">
             Build resumes, prepare interviews, and grow your career with AI.
           </p>
@@ -100,11 +112,18 @@ export default function Dashboard() {
                 </p>
               </div>
 
-              <div className="card border-0 shadow-sm p-4 mb-4">
+              <div className="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a href="/resume-builder" className="btn btn-light">
+                  Build Resume →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="card border-0 shadow-sm p-4 mb-4">
             <h4 className="fw-bold mb-4">🚀 Quick Actions</h4>
 
             <div className="row g-3">
-
               <div className="col-md-3">
                 <a href="/resume-builder" className="btn btn-primary w-100 py-3">
                   📄 Resume Builder
@@ -124,17 +143,8 @@ export default function Dashboard() {
               </div>
 
               <div className="col-md-3">
-                <a href="/my-resumes" className="btn btn-dark w-100 py-3">
-                  💼 My Resumes
-                </a>
-              </div>
-
-            </div>
-          </div>
-
-              <div className="col-lg-4 text-lg-end mt-3 mt-lg-0">
-                <a href="/resume-builder" className="btn btn-light">
-                  Build Resume →
+                <a href="/job-tracker" className="btn btn-dark w-100 py-3">
+                  💼 Job Tracker
                 </a>
               </div>
             </div>
@@ -184,6 +194,48 @@ export default function Dashboard() {
             </div>
           </div>
 
+          <div className="row g-4 mb-4">
+            <div className="col-lg-3 col-md-6">
+              <div className="stats-card">
+                <div className="stats-icon" style={{ background: "#e0f2fe" }}>
+                  💼
+                </div>
+                <p className="text-muted mb-1">Total Jobs</p>
+                <h2>{analytics.total_jobs}</h2>
+              </div>
+            </div>
+
+            <div className="col-lg-3 col-md-6">
+              <div className="stats-card">
+                <div className="stats-icon" style={{ background: "#fef3c7" }}>
+                  🎤
+                </div>
+                <p className="text-muted mb-1">Interviews</p>
+                <h2>{analytics.interview_jobs}</h2>
+              </div>
+            </div>
+
+            <div className="col-lg-3 col-md-6">
+              <div className="stats-card">
+                <div className="stats-icon" style={{ background: "#fee2e2" }}>
+                  📊
+                </div>
+                <p className="text-muted mb-1">Average ATS Score</p>
+                <h2>{analytics.average_ats_score}%</h2>
+              </div>
+            </div>
+
+            <div className="col-lg-3 col-md-6">
+              <div className="stats-card">
+                <div className="stats-icon" style={{ background: "#dcfce7" }}>
+                  🏆
+                </div>
+                <p className="text-muted mb-1">Offers</p>
+                <h2>{analytics.offer_jobs}</h2>
+              </div>
+            </div>
+          </div>
+
           <div className="row mt-4">
             <div className="col-lg-8 mb-4">
               <div className="card border-0 shadow-sm p-4 analytics-card">
@@ -210,7 +262,6 @@ export default function Dashboard() {
             <div className="col-lg-4 mb-4">
               <div className="card border-0 shadow-sm p-4 analytics-card">
                 <h4 className="fw-bold mb-3">🔥 Daily Goal</h4>
-
                 <h2>70%</h2>
 
                 <div className="progress mt-3">
@@ -240,18 +291,26 @@ export default function Dashboard() {
             </div>
 
             <div className="activity-item">
-              <span>👤</span>
+              <span>💼</span>
               <div>
-                <h6>Profile Updated</h6>
-                <p>Profile completion is {analytics.profile_completion}%.</p>
+                <h6>Job Tracker Updated</h6>
+                <p>You have {analytics.total_jobs} job applications.</p>
               </div>
             </div>
 
             <div className="activity-item">
-              <span>🤖</span>
+              <span>📊</span>
               <div>
-                <h6>AI Tools Ready</h6>
-                <p>ATS, Job Matcher, Interview and Roadmap are available.</p>
+                <h6>ATS Score Updated</h6>
+                <p>Average ATS score is {analytics.average_ats_score}%.</p>
+              </div>
+            </div>
+
+            <div className="activity-item">
+              <span>👤</span>
+              <div>
+                <h6>Profile Updated</h6>
+                <p>Profile completion is {analytics.profile_completion}%.</p>
               </div>
             </div>
           </div>

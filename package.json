@@ -16,7 +16,8 @@
     "react-dom": "latest",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.18.0",
-    "recharts": "^3.9.0",
+    "recharts": "^3.9.1",
+    "sweetalert2": "^11.26.25",
     "vite": "latest"
   },
   "devDependencies": {

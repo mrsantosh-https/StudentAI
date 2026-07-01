@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import api from "../services/api";
 import "../styles/profile.css";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const [profile, setProfile] = useState({
@@ -34,10 +35,15 @@ export default function Profile() {
   const handleUpdate = async (e) => {
     e.preventDefault();
 
-    const response = await api.put("/profile", profile);
+    try {
+      const response = await api.put("/profile", profile);
 
-    alert(response.data.message);
-    localStorage.setItem("user", JSON.stringify(response.data.user));
+      toast.success(response.data.message || "Profile updated successfully");
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+    } catch (error) {
+      console.error(error);
+      toast.error("Profile update failed");
+    }
   };
 
   const handlePhotoUpload = async (e) => {
@@ -45,17 +51,22 @@ export default function Profile() {
 
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append("profile_photo", file);
+    try {
+      const formData = new FormData();
+      formData.append("profile_photo", file);
 
-    const response = await api.post("/profile/photo", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+      const response = await api.post("/profile/photo", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-    alert(response.data.message);
-    fetchProfile();
+      toast.success(response.data.message || "Photo uploaded successfully");
+      fetchProfile();
+    } catch (error) {
+      console.error(error);
+      toast.error("Photo upload failed");
+    }
   };
 
   return (

@@ -1,0 +1,83 @@
+.job-stat-card {
+  border: none;
+  border-radius: 20px;
+  padding: 20px;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all .3s ease;
+  box-shadow: 0 12px 30px rgba(0,0,0,.12);
+}
+
+.job-stat-card:hover {
+  transform: translateY(-6px);
+}
+
+.job-stat-card h6 {
+  opacity: .9;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.job-stat-card h2 {
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.job-stat-card .icon {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  font-size: 42px;
+  opacity: .25;
+}
+
+.total-card{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+}
+
+.applied-card{
+  background:linear-gradient(135deg,#0ea5e9,#06b6d4);
+}
+
+.interview-card{
+  background:linear-gradient(135deg,#f59e0b,#f97316);
+}
+
+.offer-card{
+  background:linear-gradient(135deg,#16a34a,#22c55e);
+}
+
+.rejected-card{
+  background:linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+.matcher-result {
+  background: #f8fafc;
+  border-left: 5px solid #2563eb;
+  border-radius: 18px;
+  padding: 22px;
+  line-height: 1.8;
+  white-space: pre-line;
+  color: #334155;
+}
+
+.dark-mode .matcher-result {
+  background: #020617;
+  color: #e5e7eb;
+  border-left-color: #38bdf8;
+}
+
+.matcher-card {
+  border-radius: 22px;
+}
+
+.matcher-textarea {
+  border-radius: 16px;
+  resize: none;
+}

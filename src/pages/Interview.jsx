@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
+import api from "../services/api";
+import toast from "react-hot-toast";
 import "../styles/interview.css";
 import {
   generateInterviewQuestions,
@@ -15,23 +17,65 @@ export default function Interview() {
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
 
+  const extractScore = (text) => {
+    const match = text.match(/(\d+)\s*\/\s*10/);
+    return match ? Number(match[1]) * 10 : null;
+  };
+
   const handleGenerate = async () => {
+    if (!role.trim()) {
+      toast.error("Please enter a role");
+      return;
+    }
+
     setLoading(true);
+
     const result = await generateInterviewQuestions(role);
 
-const questionArray = result
-  .split("\n")
-  .filter((q) => q.trim() !== "");
+    const questionArray = result
+      .split("\n")
+      .filter((q) => q.trim() !== "");
 
-setQuestions(questionArray);
+    setQuestions(questionArray);
     setLoading(false);
+    toast.success("Questions generated");
   };
 
   const handleEvaluate = async () => {
+    if (!selectedQuestion.trim()) {
+      toast.error("Please select or enter a question");
+      return;
+    }
+
+    if (!answer.trim()) {
+      toast.error("Please write your answer");
+      return;
+    }
+
     setLoading(true);
-    const result = await evaluateInterviewAnswer(selectedQuestion, answer);
-    setFeedback(result);
-    setLoading(false);
+
+    try {
+      const result = await evaluateInterviewAnswer(selectedQuestion, answer);
+
+      setFeedback(result);
+
+      const score = extractScore(result);
+
+      await api.post("/interview-history", {
+        role,
+        question: selectedQuestion,
+        answer,
+        feedback: result,
+        score,
+      });
+
+      toast.success("Feedback saved to history");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to evaluate/save interview");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -69,32 +113,26 @@ setQuestions(questionArray);
             </div>
 
             <div className="col-lg-8 mb-4">
-             <div className="card border-0 shadow p-4 interview-card">
+              <div className="card border-0 shadow p-4 interview-card">
                 <h4>Interview Questions</h4>
                 <hr />
+
                 <div className="list-group">
-                {questions.length === 0 ? (
-
+                  {questions.length === 0 ? (
                     <div className="text-muted">
-                    Questions will appear here...
+                      Questions will appear here...
                     </div>
-
-                ) : (
-
+                  ) : (
                     questions.map((question, index) => (
-
-                    <button
+                      <button
                         key={index}
                         className="list-group-item list-group-item-action question-item"
                         onClick={() => setSelectedQuestion(question)}
-                    >
+                      >
                         {question}
-                    </button>
-
+                      </button>
                     ))
-
-                )}
-
+                  )}
                 </div>
               </div>
 

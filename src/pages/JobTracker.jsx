@@ -2,10 +2,24 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import api from "../services/api";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import "../styles/jobTracker.css";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function JobTracker() {
   const [jobs, setJobs] = useState([]);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
   const [editId, setEditId] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+
   const [formData, setFormData] = useState({
     company: "",
     role: "",
@@ -25,71 +39,130 @@ export default function JobTracker() {
     fetchJobs();
   }, []);
 
-  const handleChange = (e) => {
+  const resetForm = () => {
     setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+      company: "",
+      role: "",
+      status: "Applied",
+      location: "",
+      job_link: "",
+      applied_date: "",
+      notes: "",
     });
+    setEditId(null);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleAddJob = async (e) => {
   e.preventDefault();
 
-  if (editId) {
-    await api.put(`/jobs/${editId}`, formData);
-  } else {
-    await api.post("/jobs", formData);
-  }
+  try {
+    if (editId) {
+      await api.put(`/jobs/${editId}`, formData);
+      toast.success("Job updated successfully");
+    } else {
+      await api.post("/jobs", formData);
+      toast.success("Job added successfully");
+    }
 
-  setFormData({
-    company: "",
-    role: "",
-    status: "Applied",
-    location: "",
-    job_link: "",
-    applied_date: "",
-    notes: "",
+    resetForm();
+    setShowForm(false);
+    fetchJobs();
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to save job");
+  }
+};
+
+  const handleEdit = (job) => {
+    setEditId(job.id);
+    setShowForm(true);
+
+    setFormData({
+      company: job.company || "",
+      role: job.role || "",
+      status: job.status || "Applied",
+      location: job.location || "",
+      job_link: job.job_link || "",
+      applied_date: job.applied_date || "",
+      notes: job.notes || "",
+    });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleDelete = async (id) => {
+  const result = await Swal.fire({
+    title: "Delete Job?",
+    text: "This job application will be deleted.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#dc2626",
+    cancelButtonColor: "#64748b",
+    confirmButtonText: "Delete",
+    cancelButtonText: "Cancel",
+    reverseButtons: true,
   });
 
-  setEditId(null);
-  fetchJobs();
-};
-const handleDelete = async (id) => {
-  if (!window.confirm("Delete this job application?")) return;
+  if (!result.isConfirmed) return;
 
   await api.delete(`/jobs/${id}`);
-
+  toast.success("Job deleted successfully");
   fetchJobs();
 };
-const handleEdit = (job) => {
-  setEditId(job.id);
 
-  setFormData({
-    company: job.company || "",
-    role: job.role || "",
-    status: job.status || "Applied",
-    location: job.location || "",
-    job_link: job.job_link || "",
-    applied_date: job.applied_date || "",
-    notes: job.notes || "",
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "Applied":
+        return "bg-primary";
+      case "Interview":
+        return "bg-warning text-dark";
+      case "Offer":
+        return "bg-success";
+      case "Rejected":
+        return "bg-danger";
+      default:
+        return "bg-secondary";
+    }
+  };
+
+  const filteredJobs = jobs.filter((job) => {
+    const matchesSearch =
+      job.company.toLowerCase().includes(search.toLowerCase()) ||
+      job.role.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "All" || job.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
   });
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-const getStatusClass = (status) => {
-  switch (status) {
-    case "Applied":
-      return "bg-primary";
-    case "Interview":
-      return "bg-warning text-dark";
-    case "Offer":
-      return "bg-success";
-    case "Rejected":
-      return "bg-danger";
-    default:
-      return "bg-secondary";
-  }
-};
+  const totalJobs = jobs.length;
+  const appliedJobs = jobs.filter((job) => job.status === "Applied").length;
+  const interviewJobs = jobs.filter((job) => job.status === "Interview").length;
+  const offerJobs = jobs.filter((job) => job.status === "Offer").length;
+  const rejectedJobs = jobs.filter((job) => job.status === "Rejected").length;
+
+  const interviewRate =
+    totalJobs > 0 ? Math.round((interviewJobs / totalJobs) * 100) : 0;
+
+  const offerRate =
+    totalJobs > 0 ? Math.round((offerJobs / totalJobs) * 100) : 0;
+
+  const recentJobs = jobs.slice(0, 5);
+
+  const chartData = [
+    { name: "Applied", value: appliedJobs },
+    { name: "Interview", value: interviewJobs },
+    { name: "Offer", value: offerJobs },
+    { name: "Rejected", value: rejectedJobs },
+  ];
+
+  const COLORS = ["#2563eb", "#f59e0b", "#16a34a", "#ef4444"];
+
   return (
     <div className="dashboard-layout">
       <Sidebar />
@@ -101,98 +174,247 @@ const getStatusClass = (status) => {
           <h2 className="fw-bold">💼 Job Tracker</h2>
           <p className="text-muted">Track your job applications.</p>
 
-          <div className="card border-0 shadow p-4 mt-4">
-            <h4>{editId ? "Edit Job Application" : "Add Job Application"}</h4>
-
-            <form onSubmit={handleAddJob} className="row g-3 mt-2">
-              <div className="col-md-6">
-                <input
-                  type="text"
-                  name="company"
-                  className="form-control"
-                  placeholder="Company"
-                  value={formData.company}
-                  onChange={handleChange}
-                  required
-                />
+          <div className="row g-3 mt-3 mb-4">
+            <div className="col-lg-6 col-md-6">
+              <div className="job-stat-card total-card">
+                <span className="icon">💼</span>
+                <h6>Total Jobs</h6>
+                <h2>{totalJobs}</h2>
               </div>
+            </div>
 
-              <div className="col-md-6">
+            <div className="col-lg-6 col-md-6">
+              <div className="job-stat-card applied-card">
+                <span className="icon">📩</span>
+                <h6>Applied</h6>
+                <h2>{appliedJobs}</h2>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6">
+              <div className="job-stat-card interview-card">
+                <span className="icon">🎤</span>
+                <h6>Interview</h6>
+                <h2>{interviewJobs}</h2>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-md-6">
+              <div className="job-stat-card offer-card">
+                <span className="icon">🏆</span>
+                <h6>Offers</h6>
+                <h2>{offerJobs}</h2>
+              </div>
+            </div>
+          </div>
+
+          <div className="card border-0 shadow p-4 mb-4">
+            <h4 className="fw-bold mb-3">📊 Job Status Analytics</h4>
+
+            <div style={{ width: "100%", height: "300px" }}>
+              <ResponsiveContainer>
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="value"
+                    nameKey="name"
+                    outerRadius={100}
+                    label
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={index} fill={COLORS[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="row g-3 mb-4">
+            <div className="col-md-6">
+              <div className="card border-0 shadow p-4">
+                <h6 className="text-muted">🎤 Interview Rate</h6>
+                <h2>{interviewRate}%</h2>
+                <div className="progress mt-2">
+                  <div
+                    className="progress-bar"
+                    style={{ width: `${interviewRate}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="card border-0 shadow p-4">
+                <h6 className="text-muted">🏆 Offer Rate</h6>
+                <h2>{offerRate}%</h2>
+                <div className="progress mt-2">
+                  <div
+                    className="progress-bar bg-success"
+                    style={{ width: `${offerRate}%` }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card border-0 shadow p-4 mb-4">
+            <h4 className="fw-bold mb-3">🕒 Recent Applications</h4>
+
+            {recentJobs.length > 0 ? (
+              recentJobs.map((job) => (
+                <div className="activity-item" key={job.id}>
+                  <span>💼</span>
+                  <div>
+                    <h6>
+                      {job.company} - {job.role}
+                    </h6>
+                    <p>
+                      {job.status} • {job.applied_date || "No date"}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-muted">No recent applications yet.</p>
+            )}
+          </div>
+
+          <div className="card border-0 shadow p-4 mb-4">
+            <div className="row g-3">
+              <div className="col-md-8">
                 <input
                   type="text"
-                  name="role"
                   className="form-control"
-                  placeholder="Role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  required
+                  placeholder="Search by company or role..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
 
               <div className="col-md-4">
                 <select
-                  name="status"
                   className="form-select"
-                  value={formData.status}
-                  onChange={handleChange}
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
                 >
-                  <option>Applied</option>
-                  <option>Interview</option>
-                  <option>Offer</option>
-                  <option>Rejected</option>
+                  <option value="All">All Status</option>
+                  <option value="Applied">Applied</option>
+                  <option value="Interview">Interview</option>
+                  <option value="Offer">Offer</option>
+                  <option value="Rejected">Rejected</option>
                 </select>
               </div>
-
-              <div className="col-md-4">
-                <input
-                  type="text"
-                  name="location"
-                  className="form-control"
-                  placeholder="Location"
-                  value={formData.location}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-4">
-                <input
-                  type="date"
-                  name="applied_date"
-                  className="form-control"
-                  value={formData.applied_date}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-12">
-                <input
-                  type="text"
-                  name="job_link"
-                  className="form-control"
-                  placeholder="Job Link"
-                  value={formData.job_link}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-12">
-                <textarea
-                  name="notes"
-                  className="form-control"
-                  rows="3"
-                  placeholder="Notes"
-                  value={formData.notes}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="col-md-12">
-                <button className="btn btn-primary">
-                {editId ? "Update Job" : "➕ Add Job"}
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
+
+          <div className="d-flex justify-content-end mb-3">
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                if (showForm) resetForm();
+                setShowForm(!showForm);
+              }}
+            >
+              {showForm ? "❌ Close Form" : "➕ Add New Job"}
+            </button>
+          </div>
+
+          {showForm && (
+            <div className="card border-0 shadow p-4 mb-4">
+              <h4>{editId ? "Edit Job Application" : "Add Job Application"}</h4>
+
+              <form onSubmit={handleAddJob} className="row g-3 mt-2">
+                <div className="col-md-6">
+                  <input
+                    type="text"
+                    name="company"
+                    className="form-control"
+                    placeholder="Company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="col-md-6">
+                  <input
+                    type="text"
+                    name="role"
+                    className="form-control"
+                    placeholder="Role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="col-md-4">
+                  <select
+                    name="status"
+                    className="form-select"
+                    value={formData.status}
+                    onChange={handleChange}
+                  >
+                    <option>Applied</option>
+                    <option>Interview</option>
+                    <option>Offer</option>
+                    <option>Rejected</option>
+                  </select>
+                </div>
+
+                <div className="col-md-4">
+                  <input
+                    type="text"
+                    name="location"
+                    className="form-control"
+                    placeholder="Location"
+                    value={formData.location}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-4">
+                  <input
+                    type="date"
+                    name="applied_date"
+                    className="form-control"
+                    value={formData.applied_date}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-12">
+                  <input
+                    type="text"
+                    name="job_link"
+                    className="form-control"
+                    placeholder="Job Link"
+                    value={formData.job_link}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-12">
+                  <textarea
+                    name="notes"
+                    className="form-control"
+                    rows="3"
+                    placeholder="Notes"
+                    value={formData.notes}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-12">
+                  <button className="btn btn-primary">
+                    {editId ? "Update Job" : "➕ Add Job"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
 
           <div className="card border-0 shadow p-4 mt-4">
             <h4>My Applications</h4>
@@ -211,36 +433,42 @@ const getStatusClass = (status) => {
                 </thead>
 
                 <tbody>
-                  {jobs.map((job) => (
+                  {filteredJobs.map((job) => (
                     <tr key={job.id}>
                       <td>{job.company}</td>
                       <td>{job.role}</td>
                       <td>
                         <span className={`badge ${getStatusClass(job.status)}`}>
-                        {job.status}
+                          {job.status}
                         </span>
                       </td>
                       <td>{job.location}</td>
                       <td>{job.applied_date}</td>
-
                       <td>
-  <button
-  className="btn btn-sm btn-warning me-2"
-  onClick={() => handleEdit(job)}
->
-  ✏️
-</button>
+                        <button
+                          className="btn btn-sm btn-warning me-2"
+                          onClick={() => handleEdit(job)}
+                        >
+                          ✏️
+                        </button>
 
-  <button
-  className="btn btn-sm btn-danger"
-  onClick={() => handleDelete(job.id)}
->
-  🗑️
-</button>
-</td>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => handleDelete(job.id)}
+                        >
+                          🗑️
+                        </button>
+                      </td>
                     </tr>
-                    
                   ))}
+
+                  {filteredJobs.length === 0 && (
+                    <tr>
+                      <td colSpan="6" className="text-center text-muted">
+                        No job applications found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

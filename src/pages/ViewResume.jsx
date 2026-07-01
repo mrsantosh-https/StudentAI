@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import api from "../services/api";
+import toast from "react-hot-toast";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import {
@@ -47,15 +48,34 @@ export default function ViewResume() {
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save(`${resume.full_name}_Resume.pdf`);
   };
-
+  const extractATSScore = (text) => {
+  const match = text.match(/ATS Score:\s*(\d+)/i);
+  return match ? Number(match[1]) : null;
+};
   const handleATSCheck = async () => {
-    setAtsLoading(true);
+  setAtsLoading(true);
 
+  try {
     const result = await checkATSScore(resume);
 
     setAtsResult(result);
+
+    const score = extractATSScore(result);
+
+    if (score !== null) {
+      await api.put(`/resumes/${id}/ats-score`, {
+        ats_score: score,
+      });
+    }
+
+    toast.success("ATS score checked and saved");
+  } catch (error) {
+    console.error(error);
+    toast.error("ATS check failed");
+  } finally {
     setAtsLoading(false);
-  };
+  }
+};
 
   const handleImproveResume = async () => {
     setImproveLoading(true);

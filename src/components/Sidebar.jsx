@@ -13,11 +13,11 @@ export default function Sidebar() {
         <NavLink to="/profile">👤 Profile</NavLink>
         <NavLink to="/resume-builder">📄 Resume Builder</NavLink>
         <NavLink to="/my-resumes">📋 My Resumes</NavLink>
+        <NavLink to="/job-tracker">💼 Job Tracker</NavLink>
+        <NavLink to="/job-matcher">🎯 Job Matcher</NavLink>
         <NavLink to="/cover-letter">🤖 Cover Letter</NavLink>
         <NavLink to="/interview">🎤 AI Interview</NavLink>
-        <NavLink to="/job-tracker">💼 Job Tracker</NavLink>
-        <NavLink to="/notes">🧠 Notes AI</NavLink>
-        <NavLink to="/roadmap">🗺 Roadmap</NavLink>
+        <NavLink to="/interview-history">📜 Interview History</NavLink>
         <NavLink className="nav-link" to="/career-roadmap">
           🗺 Career Roadmap
         </NavLink>
